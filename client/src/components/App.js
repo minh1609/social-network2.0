@@ -1,29 +1,39 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { connect } from "react-redux";
-import * as actions from "../actions";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { fetchUser } from "../actions";
 
 import Header from "./Header";
 import Landing from "./Landing";
 import Dashboard from "./Dashboard";
 import BlogNew from "./blogs/BlogNew";
 import BlogShow from "./blogs/BlogShow";
+import User from "./user/User";
 
-const App = ({ fetchUser }) => {
+const App = () => {
+    const dispatch = useDispatch(); // use to dispatch action
+
     useEffect(() => {
-        fetchUser();
+        dispatch(fetchUser());
     });
 
     return (
-        <div className="container">
+        <div className="">
             <BrowserRouter>
                 <div>
                     <Header />
                     <Switch>
-                        <Route path="/blogs/new" component={BlogNew} />
-                        <Route exact path="/blogs/:_id" component={BlogShow} />
-                        <Route path="/blogs" component={Dashboard} />
-                        <Route path="/" component={Landing} />
+                        <div className="ui container">
+                            <Route path="/blogs/new" component={BlogNew} />
+                            <Route
+                                exact
+                                path="/blogs/:_id"
+                                component={BlogShow}
+                            />
+                            <Route path="/blogs" component={Dashboard} />
+                            <Route path="/" exact component={Landing} />
+                            <Route path="/user" exact component={User} />
+                        </div>
                     </Switch>
                 </div>
             </BrowserRouter>
@@ -31,7 +41,4 @@ const App = ({ fetchUser }) => {
     );
 };
 
-export default connect(
-    null,
-    actions
-)(App);
+export default App;
